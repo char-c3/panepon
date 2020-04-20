@@ -34,4 +34,8 @@ public:
 	Panel(int32 x, int32 y, Panel::Type type);
 
 	void Draw(int32 xoffset = 0, int32 yoffset = 0, int32 padding = 0);
+
+	Point GetPos();
+
+	void SetPos(Point pos);
 };

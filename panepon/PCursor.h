@@ -1,12 +1,13 @@
 #pragma once
 #include <Siv3D.hpp>
 class PCursor {
-	int32 r;
-	int32 c;
+	int32 x;
+	int32 y;
 	int32 size;
 
 public:
-	PCursor(int32 r = 0, int32 c = 0);
+	PCursor(int32 x = 0, int32 y = 0);
 	void Draw(int32 lift = 0);
+	Point GetPos();
 };
 

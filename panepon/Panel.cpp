@@ -8,3 +8,12 @@ void Panel::Draw(int32 xoffset, int32 yoffset, int32 padding) {
 	rect = Rect(x + xoffset + padding, y + yoffset + padding, size - padding);
 	rect.draw(color);
 }
+
+Point Panel::GetPos() {
+	return Point(x, y);
+}
+
+void Panel::SetPos(Point pos) {
+	x = pos.x;
+	y = pos.y;
+}

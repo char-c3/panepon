@@ -27,5 +27,33 @@ void Main()
 		}
 
 		cursor.Draw();
+
+		if (KeyZ.down()) {
+			// swap
+			auto cpos = cursor.GetPos();
+
+			std::shared_ptr<Panel> left = nullptr, right = nullptr;
+			for (auto panel : panels) {
+				auto ppos = panel->GetPos();
+
+				if (ppos.x == cpos.x * 32 && ppos.y == cpos.y * 32) {
+					left = panel;
+				}
+				if (ppos.x == (cpos.x + 1) * 32 && ppos.y == cpos.y * 32) {
+					right = panel;
+				}
+			}
+
+			if (left != nullptr) {
+				auto lpos = left->GetPos();
+				left->SetPos(Point(lpos.x + 32, lpos.y));
+			}
+
+			if (right != nullptr) {
+				auto rpos = right->GetPos();
+				right->SetPos(Point(rpos.x - 32, rpos.y));
+			}
+			
+		}
 	}
 }
