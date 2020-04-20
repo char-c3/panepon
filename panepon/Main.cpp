@@ -11,9 +11,12 @@ void Main()
 	std::vector<std::shared_ptr<Panel>> panels;
 	PCursor cursor;
 
-	for (int32 r = 0; r < 6; r++) {
-		for (int32 c = 0; c < 12; c++) {
-			panels.push_back(std::make_shared<Panel>(Panel(r * 32, c * 32, Panel::Type::BLUE)));
+	for (int32 r = 0; r < 12; r++) {
+		for (int32 c = 0; c < 6; c++) {
+			if (r <= 1 && c == 1) {
+				continue;
+			}
+			panels.push_back(std::make_shared<Panel>(Panel(c * 32, r * 32, static_cast<Panel::Type>(Random(1, 6)))));
 		}
 	}
 	
