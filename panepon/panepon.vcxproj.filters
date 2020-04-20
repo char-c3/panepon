@@ -102,6 +102,9 @@
     <ClCompile Include="Panel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PCursor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -371,6 +374,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Panel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PCursor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

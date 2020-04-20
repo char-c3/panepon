@@ -5,6 +5,6 @@ Panel::Panel(int32 x, int32 y, Panel::Type type) : x(x), y(y), color(Panel::Pane
 }
 
 void Panel::Draw(int32 xoffset, int32 yoffset, int32 padding) {
-	rect = Rect(x + xoffset, y + yoffset, size - padding);
+	rect = Rect(x + xoffset + padding, y + yoffset + padding, size - padding);
 	rect.draw(color);
 }
