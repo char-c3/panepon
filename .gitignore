@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/panepon/App/AS_DEBUG
+/panepon/App/panepon(debug).exe
+/panepon/App/panepon(debug)_log.html
