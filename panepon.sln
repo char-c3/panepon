@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "panepon", "panepon\panepon.vcxproj", "{EE481A20-44EB-4439-B2D4-29CDA852F7D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE481A20-44EB-4439-B2D4-29CDA852F7D4}.Debug|x64.ActiveCfg = Debug|x64
+		{EE481A20-44EB-4439-B2D4-29CDA852F7D4}.Debug|x64.Build.0 = Debug|x64
+		{EE481A20-44EB-4439-B2D4-29CDA852F7D4}.Release|x64.ActiveCfg = Release|x64
+		{EE481A20-44EB-4439-B2D4-29CDA852F7D4}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E5B631C9-2C0B-4F46-B0E3-C2E7E6D04F2B}
+	EndGlobalSection
+EndGlobal
