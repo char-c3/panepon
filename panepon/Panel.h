@@ -17,7 +17,7 @@ private:
 	Type type;
 	Rect rect;
 	int32 size;
-
+	
 public:
 	static ColorF PanelColor(Panel::Type panelType) {
 		ColorF colors[] = {
@@ -34,7 +34,7 @@ public:
 
 	Panel(Panel::Type type, int32 size = 32);
 
-	void Draw(int32 xoffset = 0, int32 yoffset = 0, int32 padding = 0);
+	void Draw(int32 x, int32 y, int32 padding = 0);
 
 	Type GetType();
 };

@@ -9,15 +9,14 @@ void Main()
 	// 背景を水色にする
 	Scene::SetBackground(ColorF(0.8, 0.9, 1.0));
 	
-	Field field;
+	Field field(12, 6, 32, 2, 0.5);
 	field.Init();
 
 	while (System::Update())
 	{
-		field.Draw();
+		ClearPrint();
 
-		if (KeyZ.down()) {
-			field.Swap();
-		}
+		field.Update();
+		field.Draw();
 	}
 }

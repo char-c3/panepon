@@ -1,15 +1,76 @@
 #include "Field.h"
 
-Field::Field(int32 rowSize, int32 columnSize, int32 panelSize, int32 panelPadding) 
+void Field::startSwap() {
+	if (swapping) {
+		return;
+	}
+
+	// TODO: “ü‚ê‘Ö‚¦‰Â”\”»’è
+
+	swapSw.start();
+	swapping = true;
+}
+
+void Field::updateSwap() {
+	auto elapsed = swapSw.sF();
+	if (elapsed < swapTime) {
+		return;
+	}
+
+	endSwap();
+}
+
+void Field::drawSwap() {
+	auto elapsed = swapSw.sF();
+
+	auto cpos = cursor.GetPos();
+	auto r = cpos.y;
+	auto c = cpos.x;
+	
+	auto left = panelMat[r][c];
+	auto right = panelMat[r][c + 1];
+	auto rate = elapsed / swapTime;
+
+	left .Draw((c     + rate) * panelSize, r * panelSize, panelPadding);
+	right.Draw((c + 1 - rate) * panelSize, r * panelSize, panelPadding);
+}
+
+void Field::endSwap() {
+	swapping = false;
+	swapSw.reset();
+
+	auto cpos = cursor.GetPos();
+	auto r = cpos.y;
+	auto c = cpos.x;
+
+	auto tmp = panelMat[r][c];
+	panelMat[r][c] = panelMat[r][c + 1];
+	panelMat[r][c + 1] = tmp;
+}
+
+bool Field::isThisSwapping(int32 c, int32 r) {
+	auto cpos = cursor.GetPos();
+	return swapping && (c == cpos.x || c == cpos.x + 1) && r == cpos.y;
+}
+
+Field::Field(
+	int32 rowSize,
+	int32 columnSize,
+	int32 panelSize,
+	int32 panelPadding,
+	double swapTime) 
 	: columnSize(columnSize),
 	  rowSize(rowSize),
       panelSize(panelSize),
       panelPadding(panelPadding),
-	  cursor(PCursor(0, 0, panelSize)) {
-	for (auto c : Iota(columnSize)) {
+	  cursor(PCursor(0, 0, panelSize)),
+      swapping(false),
+	  swapTime(swapTime),
+	  swapSw() {
+	for (auto r : Iota(rowSize)) {
 		panelMat << PanelRow();
-		for (auto r : Iota(rowSize)) {
-			panelMat[c] << Panel(Panel::Type::NONE, panelSize);
+		for (auto c : Iota(columnSize)) {
+			panelMat[r] << Panel(Panel::Type::NONE, panelSize);
 		}
 	}
 }
@@ -17,29 +78,39 @@ Field::Field(int32 rowSize, int32 columnSize, int32 panelSize, int32 panelPaddin
 void Field::Init() {
 	for (auto c : Iota(columnSize)) {
 		for (auto r : Iota(rowSize)) {
+			if (c == 1 && r <= 1) {
+				continue;
+			}
 			auto type = static_cast<Panel::Type>((r + c) % 6 + 1);
-			panelMat[c][r] = Panel(type, panelSize);
+			panelMat[r][c] = Panel(type, panelSize);
 		}
+	}
+}
+
+void Field::Update() {
+	if (KeyZ.down()) {
+		startSwap();
+	}
+
+	if (swapping) {
+		updateSwap();
 	}
 }
 
 void Field::Draw(int32 x, int32 y) {
-	for (auto c : Iota(columnSize)) {
-		for (auto r : Iota(rowSize)) {
-			panelMat[c][r].Draw(c * panelSize, r * panelSize, panelPadding);
+	for (auto r : Iota(rowSize)) {
+		for (auto c : Iota(columnSize)) {
+			if (isThisSwapping(c, r)) {
+				continue;
+			}
+
+			panelMat[r][c].Draw(c * panelSize, r * panelSize, panelPadding);
 		}
 	}
 
+	if (swapping) {
+		drawSwap();
+	}
+
 	cursor.Draw();
-}
-
-void Field::Swap() {
-	auto cpos = cursor.GetPos();
-	auto c = cpos.x;
-	auto r = cpos.y;
-
-	auto tmp = panelMat[c][r];
-
-	panelMat[c][r] = panelMat[c + 1][r];
-	panelMat[c + 1][r] = tmp;
 }

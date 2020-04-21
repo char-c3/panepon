@@ -15,16 +15,27 @@ class Field {
 	int32 rowSize;
 	int32 panelSize;
 	int32 panelPadding;
+
+	bool swapping;
+	Stopwatch swapSw;
+	double swapTime; // sec
+	void startSwap();
+	void updateSwap();
+	void drawSwap();
+	void endSwap();
+	bool isThisSwapping(int32 c, int32 r);
+
 public:
 	Field(int32 rowSize = 12,
 		int32 columnSize = 6,
 		int32 panelSize = 32,
-		int32 panelPadding = 2);
+		int32 panelPadding = 2,
+		double swapTime = 0.033);
 
 	void Init();
 
-	void Draw(int32 x = 0, int32 y = 0);
+	void Update();
 
-	void Swap();
+	void Draw(int32 x = 0, int32 y = 0);
 };
 
