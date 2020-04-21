@@ -1,19 +1,16 @@
 #include "Panel.h"
 
-Panel::Panel(int32 x, int32 y, Panel::Type type) : x(x), y(y), color(Panel::PanelColor(type)) {
-	size = 32;
+Panel::Panel(Panel::Type type, int32 size) 
+	: type(type),
+	  color(Panel::PanelColor(type)),
+      size(size) {
 }
 
-void Panel::Draw(int32 xoffset, int32 yoffset, int32 padding) {
-	rect = Rect(x + xoffset + padding, y + yoffset + padding, size - padding);
+void Panel::Draw(int32 x, int32 y, int32 padding) {
+	rect = Rect(x + padding, y + padding, size - padding);
 	rect.draw(color);
 }
 
-Point Panel::GetPos() {
-	return Point(x, y);
-}
-
-void Panel::SetPos(Point pos) {
-	x = pos.x;
-	y = pos.y;
+Panel::Type Panel::GetType() {
+	return type;
 }

@@ -1,12 +1,6 @@
 #pragma once
 # include <Siv3D.hpp>
 class Panel {
-	int32 x;
-	int32 y;
-	ColorF color;
-	Rect rect;
-	int32 size;
-
 public:
 	enum Type {
 		NONE,
@@ -18,6 +12,13 @@ public:
 		BLUE
 	};
 
+private:
+	ColorF color;
+	Type type;
+	Rect rect;
+	int32 size;
+
+public:
 	static ColorF PanelColor(Panel::Type panelType) {
 		ColorF colors[] = {
 			ColorF(0, 0, 0, 0), // NONE
@@ -31,11 +32,9 @@ public:
 		return colors[panelType];
 	}
 
-	Panel(int32 x, int32 y, Panel::Type type);
+	Panel(Panel::Type type, int32 size = 32);
 
 	void Draw(int32 xoffset = 0, int32 yoffset = 0, int32 padding = 0);
 
-	Point GetPos();
-
-	void SetPos(Point pos);
+	Type GetType();
 };
