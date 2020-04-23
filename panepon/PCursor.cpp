@@ -4,6 +4,18 @@ PCursor::PCursor(int32 x, int32 y, int32 panelSize)
 	: x(x), y(y), panelSize(panelSize) {
 }
 
+void PCursor::Update(int32 columnSize, int32 rowSize) {
+	if (KeyLeft.down()) {
+		x = Clamp(x - 1, 0, columnSize);
+	} else if (KeyRight.down()) {
+		x = Clamp(x + 1, 0, columnSize);
+	} else if (KeyUp.down()) {
+		y = Clamp(y - 1, 0, rowSize);
+	} else if (KeyDown.down()) {
+		y = Clamp(y + 1, 0, rowSize);
+	}
+}
+
 void PCursor::Draw(int32 lift) {
 	auto innerColor = ColorF(1, 1, 1, 1);
 	auto innerStroke = 3;

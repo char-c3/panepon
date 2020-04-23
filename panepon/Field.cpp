@@ -91,10 +91,13 @@ void Field::Update() {
 	if (KeyZ.down()) {
 		startSwap();
 	}
-
+		
 	if (swapping) {
 		updateSwap();
+		return;
 	}
+
+	cursor.Update(columnSize, rowSize);
 }
 
 void Field::Draw(int32 x, int32 y) {

@@ -7,7 +7,11 @@ class PCursor {
 
 public:
 	PCursor(int32 x = 0, int32 y = 0, int32 panelSize = 32);
+
+	void Update(int32 columnSize, int32 rowSize);
+
 	void Draw(int32 lift = 0);
+
 	Point GetPos();
 };
 

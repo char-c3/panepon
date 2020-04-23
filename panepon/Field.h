@@ -24,7 +24,7 @@ class Field {
 	void drawSwap();
 	void endSwap();
 	bool isThisSwapping(int32 c, int32 r);
-
+	
 public:
 	Field(int32 rowSize = 12,
 		int32 columnSize = 6,
