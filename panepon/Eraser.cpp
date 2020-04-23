@@ -60,3 +60,7 @@ void Eraser::Update() {
 	}
 	panels.clear();
 }
+
+bool Eraser::Accomplished() {
+	return panels.size() == 0;
+}

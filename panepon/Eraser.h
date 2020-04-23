@@ -20,5 +20,7 @@ public:
     	double postEraseTime = 0.5);
 
 	void Update();
+
+	bool Accomplished();
 };
 

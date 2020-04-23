@@ -148,6 +148,10 @@ void Field::updateErasers() {
 	for (auto&& eraser : erasers) {
 		eraser.Update();
 	}
+
+	erasers.remove_if([](Eraser eraser) {
+		return eraser.Accomplished();
+	});
 }
 
 Field::Field(

@@ -37,7 +37,7 @@ void Panel::EraseTemporally() {
 }
 
 void Panel::EraseComplete() {
-	erasing = false;
-	tempErased = false;
+	erasing = true;
+	tempErased = true;
 	type = Panel::Type::NONE;
 }
