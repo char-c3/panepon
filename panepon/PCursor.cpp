@@ -6,13 +6,13 @@ PCursor::PCursor(int32 x, int32 y, int32 panelSize)
 
 void PCursor::Update(int32 columnSize, int32 rowSize) {
 	if (KeyLeft.down()) {
-		x = Clamp(x - 1, 0, columnSize);
+		x = Clamp(x - 1, 0, columnSize - 2);
 	} else if (KeyRight.down()) {
-		x = Clamp(x + 1, 0, columnSize);
+		x = Clamp(x + 1, 0, columnSize - 2);
 	} else if (KeyUp.down()) {
-		y = Clamp(y - 1, 0, rowSize);
+		y = Clamp(y - 1, 0, rowSize - 1);
 	} else if (KeyDown.down()) {
-		y = Clamp(y + 1, 0, rowSize);
+		y = Clamp(y + 1, 0, rowSize - 1);
 	}
 }
 

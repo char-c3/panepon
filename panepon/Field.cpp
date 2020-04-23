@@ -46,6 +46,10 @@ void Field::endSwap() {
 	auto tmp = panelMat[r][c];
 	panelMat[r][c] = panelMat[r][c + 1];
 	panelMat[r][c + 1] = tmp;
+
+	auto erasedPanels = getErasedPanels({Point(c, r), Point(c + 1, r)});
+	auto eraser = Eraser(erasedPanels);
+	erasers << eraser;
 }
 
 bool Field::isThisSwapping(int32 c, int32 r) {
@@ -68,6 +72,83 @@ void Field::drop() {
 	}
 }
 
+Array<Panel*> Field::getErasedPanels(Array<Point> detonators) {
+	Array<Array<bool> > erasedFlags;
+	for (auto r : Iota(rowSize)) {
+		erasedFlags << Array<bool>(columnSize, false);
+	}
+	
+	for (auto detonator : detonators) {
+		auto r = detonator.y;
+		auto c = detonator.x;
+		
+		// NONE‚È‚ç–³Ž‹‚·‚é
+		if (panelMat[r][c].GetType() == Panel::Type::NONE) {
+			continue;
+		}
+
+		// vertical
+		auto top = r;
+		auto bottom = r;
+		// search to top
+		for (auto dr : Iota(r, -1, -1)) {
+			if (panelMat[dr][c].GetType() != panelMat[r][c].GetType()) {
+				break;
+			}
+			top = dr;
+		}
+		for (auto dr : Iota(r, rowSize)) {
+			if (panelMat[dr][c].GetType() != panelMat[r][c].GetType()) {
+				break;
+			}
+			bottom = dr;
+		}
+		// c‚É3‚ÂˆÈã˜A‚È‚Á‚Ä‚¢‚È‚¢‚ÆAÁ‚¦‚Ä‚¢‚é‚Æ”»’f‚³‚ê‚È‚¢
+		if (bottom - top + 1 >= 3) {
+			for (auto dr : Iota(top, bottom + 1)) {
+				erasedFlags[dr][c] = true;
+			}
+		}
+
+		// horizontal
+		auto left = c;
+		auto right = c;
+		for (auto dc : Iota(c, -1, -1)) {
+			if (panelMat[r][dc].GetType() != panelMat[r][c].GetType()) {
+				break;
+			}
+			left = dc;
+		}
+		for (auto dc : Iota(c, columnSize)) {
+			if (panelMat[r][dc].GetType() != panelMat[r][c].GetType()) {
+				break;
+			}
+			right = dc;
+		}
+		// ‰¡‚à“¯—l‚É3‚ÂˆÈã˜A‚È‚Á‚Ä‚¢‚È‚¢‚ÆAÁ‚¦‚Ä‚¢‚é‚Æ”»’f‚³‚ê‚È‚¢
+		if (right - left + 1 >= 3) {
+			for (auto dc : Iota(left, right + 1)) {
+				erasedFlags[r][dc] = true;
+			}
+		}
+	}
+
+	Array<Panel*> ret;
+	for (auto r : Iota(rowSize)) {
+		for (auto c : Iota(columnSize)) {
+			if (erasedFlags[r][c]) {
+				ret << &panelMat[r][c];
+			}
+		}
+	}
+	return ret;
+}
+
+void Field::updateErasers() {
+	for (auto&& eraser : erasers) {
+		eraser.Update();
+	}
+}
 
 Field::Field(
 	int32 rowSize,
@@ -85,7 +166,8 @@ Field::Field(
 	  swapTime(swapTime),
 	  swapSw(),
 	  dropTime(dropTime),
-	  dropSw() {
+	  dropSw(),
+	  erasers() {
 	for (auto r : Iota(rowSize)) {
 		panelMat << PanelRow();
 		for (auto c : Iota(columnSize)) {
@@ -108,6 +190,7 @@ void Field::Init() {
 }
 
 void Field::Update() {
+	updateErasers();
 	drop();
 
 	if (KeyZ.down()) {

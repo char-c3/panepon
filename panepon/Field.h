@@ -2,6 +2,7 @@
 #include <Siv3D.hpp>
 #include "Panel.h"
 #include "PCursor.h"
+#include "Eraser.h"
 
 using PanelRow = Array<Panel>;
 using PanelMat = Array<PanelRow>;
@@ -31,7 +32,10 @@ class Field {
 	void drop();
 
 	// Á‹ŠÖ˜A
-	void erase();
+	Array<Eraser> erasers;
+	Array<Panel*> getErasedPanels(Array<Point> detonators);
+	void updateErasers();
+
 public:
 	Field(int32 rowSize = 12,
 		int32 columnSize = 6,

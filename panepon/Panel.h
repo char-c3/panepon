@@ -9,7 +9,7 @@ public:
 		GREEN,
 		YELLOW,
 		PURPLE,
-		BLUE
+		BLUE,
 	};
 
 private:
@@ -17,6 +17,9 @@ private:
 	Type type;
 	Rect rect;
 	int32 size;
+
+	bool erasing;
+	bool tempErased;
 	
 public:
 	static ColorF PanelColor(Panel::Type panelType) {
@@ -37,4 +40,12 @@ public:
 	void Draw(int32 x, int32 y, int32 padding = 0);
 
 	Type GetType();
+
+	void StartFlash();
+
+	void EndFlash();
+
+	void EraseTemporally();
+
+	void EraseComplete();
 };

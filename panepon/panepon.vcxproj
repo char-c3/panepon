@@ -108,6 +108,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Eraser.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="PCursor.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -236,6 +237,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Eraser.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="PCursor.h" />
     <ClInclude Include="Panel.h" />
