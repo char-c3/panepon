@@ -68,14 +68,40 @@ void Field::drop() {
 		return;
 	}
 	dropSw.restart();
+
+	Array<Point> detonators;
+	auto cpos = cursor.GetPos();
 	for (auto r : Iota(rowSize - 1, 0, -1)) {
 		for (auto c : Iota(columnSize)) {
-			if (panelMat[r][c].GetType() == Panel::Type::NONE) {
-				panelMat[r][c] = panelMat[r - 1][c];
-				panelMat[r - 1][c] = Panel(Panel::Type::NONE, panelSize);
+			if (panelMat[r][c].GetType() != Panel::Type::NONE) {
+				continue;
+			}
+			panelMat[r][c] = panelMat[r - 1][c];
+			panelMat[r - 1][c] = Panel(Panel::Type::NONE, panelSize);
+			
+			// detonator”»’è
+			bool thisIsDetonator = true;
+			for (auto dr : Iota(r, rowSize)) {
+				bool thereIsBlank = panelMat[dr][c].GetType() == Panel::Type::NONE;
+				if (thereIsBlank) {
+					thisIsDetonator = false;
+					break;
+				}
+				bool thereIsSwapping = swapping && (dr == cpos.y || dr == cpos.y + 1);
+				if (thereIsSwapping) {
+					break;
+				}
+			}
+
+			if (thisIsDetonator) {
+				detonators << Point(c, r);
 			}
 		}
 	}
+
+	auto erasedPanels = getErasedPanels(detonators);
+	auto eraser = Eraser(erasedPanels);
+	erasers << eraser;
 }
 
 Array<Panel*> Field::getErasedPanels(Array<Point> detonators) {
