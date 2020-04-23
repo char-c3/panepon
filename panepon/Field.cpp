@@ -54,6 +54,10 @@ bool Field::isThisSwapping(int32 c, int32 r) {
 }
 
 void Field::drop() {
+	if (dropSw.sF() < dropTime) {
+		return;
+	}
+	dropSw.restart();
 	for (auto r : Iota(rowSize - 1, 0, -1)) {
 		for (auto c : Iota(columnSize)) {
 			if (panelMat[r][c].GetType() == Panel::Type::NONE) {
@@ -64,12 +68,14 @@ void Field::drop() {
 	}
 }
 
+
 Field::Field(
 	int32 rowSize,
 	int32 columnSize,
 	int32 panelSize,
 	int32 panelPadding,
-	double swapTime) 
+	double swapTime,
+	double dropTime) 
 	: columnSize(columnSize),
 	  rowSize(rowSize),
       panelSize(panelSize),
@@ -77,13 +83,16 @@ Field::Field(
 	  cursor(PCursor(0, 0, panelSize)),
       swapping(false),
 	  swapTime(swapTime),
-	  swapSw() {
+	  swapSw(),
+	  dropTime(dropTime),
+	  dropSw() {
 	for (auto r : Iota(rowSize)) {
 		panelMat << PanelRow();
 		for (auto c : Iota(columnSize)) {
 			panelMat[r] << Panel(Panel::Type::NONE, panelSize);
 		}
 	}
+	dropSw.start();
 }
 
 void Field::Init() {

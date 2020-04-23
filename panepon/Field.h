@@ -26,13 +26,19 @@ class Field {
 	bool isThisSwapping(int32 c, int32 r);
 	
 	// óéâ∫ä÷òA
+	Stopwatch dropSw;
+	double dropTime;
 	void drop();
+
+	// è¡ãéä÷òA
+	void erase();
 public:
 	Field(int32 rowSize = 12,
 		int32 columnSize = 6,
 		int32 panelSize = 32,
 		int32 panelPadding = 2,
-		double swapTime = 0.033);
+		double swapTime = 0.033,
+		double dropTime = 0.016);
 
 	void Init();
 
