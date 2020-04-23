@@ -53,6 +53,17 @@ bool Field::isThisSwapping(int32 c, int32 r) {
 	return swapping && (c == cpos.x || c == cpos.x + 1) && r == cpos.y;
 }
 
+void Field::drop() {
+	for (auto r : Iota(rowSize - 1, 0, -1)) {
+		for (auto c : Iota(columnSize)) {
+			if (panelMat[r][c].GetType() == Panel::Type::NONE) {
+				panelMat[r][c] = panelMat[r - 1][c];
+				panelMat[r - 1][c] = Panel(Panel::Type::NONE, panelSize);
+			}
+		}
+	}
+}
+
 Field::Field(
 	int32 rowSize,
 	int32 columnSize,
@@ -78,7 +89,7 @@ Field::Field(
 void Field::Init() {
 	for (auto c : Iota(columnSize)) {
 		for (auto r : Iota(rowSize)) {
-			if (c == 1 && r <= 1) {
+			if (c == 1 && r <= 6) {
 				continue;
 			}
 			auto type = static_cast<Panel::Type>((r + c) % 6 + 1);
@@ -88,6 +99,8 @@ void Field::Init() {
 }
 
 void Field::Update() {
+	drop();
+
 	if (KeyZ.down()) {
 		startSwap();
 	}
