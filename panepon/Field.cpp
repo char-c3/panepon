@@ -5,7 +5,13 @@ void Field::startSwap() {
 		return;
 	}
 
-	// TODO: “ü‚ê‘Ö‚¦‰Â”\”»’è
+	auto cpos = cursor.GetPos();
+	auto r = cpos.y;
+	auto c = cpos.x;
+
+	if (panelMat[r][c].IsErasing() || panelMat[r][c + 1].IsErasing()) {
+		return;
+	}
 
 	swapSw.start();
 	swapping = true;

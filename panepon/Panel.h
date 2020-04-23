@@ -48,4 +48,6 @@ public:
 	void EraseTemporally();
 
 	void EraseComplete();
+
+	bool IsErasing();
 };

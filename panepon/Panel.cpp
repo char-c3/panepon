@@ -41,3 +41,7 @@ void Panel::EraseComplete() {
 	tempErased = true;
 	type = Panel::Type::NONE;
 }
+
+bool Panel::IsErasing() {
+	return erasing;
+}
