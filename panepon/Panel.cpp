@@ -43,5 +43,5 @@ void Panel::EraseComplete() {
 }
 
 bool Panel::IsErasing() {
-	return erasing;
+	return erasing && type != Panel::Type::NONE;
 }

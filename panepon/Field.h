@@ -42,7 +42,7 @@ public:
 		int32 panelSize = 32,
 		int32 panelPadding = 2,
 		double swapTime = 0.033,
-		double dropTime = 0.016);
+		double dropTime = 0.033);
 
 	void Init();
 
