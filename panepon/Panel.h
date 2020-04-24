@@ -39,6 +39,8 @@ public:
 
 	void Draw(int32 x, int32 y, int32 padding = 0);
 
+	void DrawFlowing(int32 x, int32 y, int32 padding = 0);
+
 	Type GetType();
 
 	void StartFlash();

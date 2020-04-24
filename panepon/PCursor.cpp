@@ -39,3 +39,7 @@ void PCursor::Draw(int32 lift) {
 Point PCursor::GetPos() {
 	return Point(x, y);
 }
+
+void PCursor::Flow() {
+	y--;
+}

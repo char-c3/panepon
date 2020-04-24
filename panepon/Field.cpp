@@ -36,9 +36,10 @@ void Field::drawSwap() {
 	auto left = panelMat[r][c];
 	auto right = panelMat[r][c + 1];
 	auto rate = elapsed / swapTime;
+	auto h = (r - flowRate) * panelSize;
 
-	left .Draw((c     + rate) * panelSize, r * panelSize, panelPadding);
-	right.Draw((c + 1 - rate) * panelSize, r * panelSize, panelPadding);
+	left .Draw((c     + rate) * panelSize, h, panelPadding);
+	right.Draw((c + 1 - rate) * panelSize, h, panelPadding);
 }
 
 void Field::endSwap() {
@@ -186,24 +187,67 @@ void Field::updateErasers() {
 	});
 }
 
+void Field::updateFlow() {
+	if (next.size() == 0) {
+		for (auto c : Iota(columnSize)) {
+			next << Panel(static_cast<Panel::Type>(Random(1, 6)), panelSize);
+		}
+		flowSw.restart();
+	}
+
+	flowRate = flowSw.sF() / flowTime;
+
+	if (flowRate >= 1) {
+		flowRate = 0;
+		// ゲームオーバー判定開始
+		// ゲームオーバーなら終わらせる
+
+		// ゲームオーバーじゃない & 猶予時間終了したらせり上げる
+		flow();
+		// せりあがったブロックを中心に消去判定を行う
+		flowSw.restart();
+	}
+}
+
+void Field::flow() {
+	for (auto r : Iota(1, rowSize)) {
+		for (auto c : Iota(columnSize)) {
+			panelMat[r - 1][c] = panelMat[r][c];
+		}
+	}
+
+	for (auto c : Iota(columnSize)) {
+		panelMat[rowSize - 1][c] = next[c];
+	}
+
+	next.clear();
+	cursor.Flow();
+}
+
+
 Field::Field(
 	int32 rowSize,
 	int32 columnSize,
 	int32 panelSize,
 	int32 panelPadding,
 	double swapTime,
-	double dropTime) 
-	: columnSize(columnSize),
-	  rowSize(rowSize),
-      panelSize(panelSize),
-      panelPadding(panelPadding),
-	  cursor(PCursor(0, 0, panelSize)),
-      swapping(false),
-	  swapTime(swapTime),
-	  swapSw(),
-	  dropTime(dropTime),
-	  dropSw(),
-	  erasers() {
+	double dropTime,
+	double flowTime
+) : columnSize(columnSize),
+	rowSize(rowSize),
+	panelSize(panelSize),
+	panelPadding(panelPadding),
+	cursor(PCursor((columnSize - 1) / 2, (rowSize - 1) / 2, panelSize)),
+	swapping(false),
+	swapTime(swapTime),
+	swapSw(),
+	dropTime(dropTime),
+	dropSw(),
+	erasers(),
+	next(),
+	flowSw(),
+	flowRate(),
+	flowTime(flowTime) {
 	for (auto r : Iota(rowSize)) {
 		panelMat << PanelRow();
 		for (auto c : Iota(columnSize)) {
@@ -216,16 +260,23 @@ Field::Field(
 void Field::Init() {
 	for (auto c : Iota(columnSize)) {
 		for (auto r : Iota(rowSize)) {
-			if (c == 1 && r <= 6) {
+			if (r <= 3 || c == 1 && r <= 6) {
 				continue;
 			}
 			auto type = static_cast<Panel::Type>((r + c) % 6 + 1);
 			panelMat[r][c] = Panel(type, panelSize);
 		}
 	}
+	
+	flowSw.start();
 }
 
 void Field::Update() {
+	bool stopping = swapping || erasers.size() != 0;
+	if (stopping) {
+		flowSw.pause();
+	}
+
 	updateErasers();
 	drop();
 
@@ -235,10 +286,18 @@ void Field::Update() {
 		
 	if (swapping) {
 		updateSwap();
-		return;
 	}
 
 	cursor.Update(columnSize, rowSize);
+
+	if (stopping) {
+		return;
+	}
+
+	flowSw.resume();
+
+	updateFlow();
+	
 }
 
 void Field::Draw(int32 x, int32 y) {
@@ -248,13 +307,17 @@ void Field::Draw(int32 x, int32 y) {
 				continue;
 			}
 
-			panelMat[r][c].Draw(c * panelSize, r * panelSize, panelPadding);
+			panelMat[r][c].Draw(c * panelSize, (r - flowRate) * panelSize, panelPadding);
 		}
+	}
+
+	for (auto c : Iota(next.size())) {
+		next[c].DrawFlowing(c * panelSize, (rowSize - flowRate) * panelSize, panelPadding);
 	}
 
 	if (swapping) {
 		drawSwap();
 	}
 
-	cursor.Draw();
+	cursor.Draw(panelSize * flowRate);
 }

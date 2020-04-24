@@ -19,6 +19,15 @@ void Panel::Draw(int32 x, int32 y, int32 padding) {
 	rect.draw(c);
 }
 
+void Panel::DrawFlowing(int32 x, int32 y, int32 padding) {
+	rect = Rect(x + padding, y + padding, size - padding);
+	auto c = color;
+	c.b *= 0.7;
+	c.g *= 0.7;
+	c.r *= 0.7;
+	rect.draw(c);
+}
+
 Panel::Type Panel::GetType() {
 	return type;
 }

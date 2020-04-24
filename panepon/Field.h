@@ -36,13 +36,22 @@ class Field {
 	Array<Panel*> getErasedPanels(Array<Point> detonators);
 	void updateErasers();
 
+	// Ÿ‚Ìƒpƒlƒ‹‚ğ¶¬
+	PanelRow next;
+	Stopwatch flowSw;
+	double flowRate;
+	double flowTime;
+	void updateFlow();
+	void flow();
+
 public:
 	Field(int32 rowSize = 12,
 		int32 columnSize = 6,
 		int32 panelSize = 32,
 		int32 panelPadding = 2,
-		double swapTime = 0.033,
-		double dropTime = 0.033);
+		double swapTime = 2.0 / 60,
+		double dropTime = 1.0 / 120,
+		double flowTime = 10);
 
 	void Init();
 

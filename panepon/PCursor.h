@@ -13,5 +13,7 @@ public:
 	void Draw(int32 lift = 0);
 
 	Point GetPos();
+
+	void Flow();
 };
 
